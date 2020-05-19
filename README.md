@@ -22,6 +22,28 @@ module.exports = {
 ```
 
 - css 로더 사용하기
+
+```js
+var path = require("path");
+
+module.exports = {
+  mode: "none",
+  entry: "./src/index.js",
+  output: {
+    filename: "main.js",
+    path: path.resolve(__dirname, "dist"),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ["css-loader"],
+      },
+    ],
+  },
+};
+```
+
 - sass 로더, style 로더 사용하기
 - 플러그인 사용하기
 
