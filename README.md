@@ -84,6 +84,38 @@ module.exports = {
 
 - 플러그인 사용하기
 
+```js
+var path = require("path");
+var webpack = require("webpack");
+// npm install --save-dev html-webpack-plugin
+// 웹팩으로 빌드한 결과물로 HTML 파일을 생성해주는 플러그인
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+  mode: "none",
+  entry: "./src/index.js",
+  output: {
+    filename: "main.js",
+    path: path.resolve(__dirname, "dist"),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ["css-loader"],
+      },
+      {
+        test: /\.scss$/,
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
+    ],
+  },
+  // 플러그인 배열에 생성자 키워드로 인스턴스 선언
+  // 플러그인은 클래스로 이루어져있다고 함
+  plugins: [new HtmlWebpackPlugin(), new webpack.ProgressPlugin()],
+};
+```
+
 ### 활용
 
 - 기초적인 코드 스플리팅
