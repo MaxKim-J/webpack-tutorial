@@ -23,6 +23,38 @@ module.exports = {
 
 - css 로더 사용하기
 
+```bash
+npm i -D css-loader
+```
+
+```js
+var path = require("path");
+
+module.exports = {
+  mode: "none",
+  entry: "./src/index.js",
+  output: {
+    filename: "main.js",
+    path: path.resolve(__dirname, "dist"),
+  },
+  // .js파일에서 css를 모듈로써 임포트할때 로더가 필요한 것
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ["css-loader"],
+      },
+    ],
+  },
+};
+```
+
+- sass 로더, style 로더 사용하기
+
+```bash
+npm i node-sass sass-loader style-loader
+```
+
 ```js
 var path = require("path");
 
@@ -39,12 +71,17 @@ module.exports = {
         test: /\.css$/,
         use: ["css-loader"],
       },
+      // style-loader: 해당 CSS 파일이 웹 애플리케이션에 인라인 스타일 태그로 추가되게함
+      // 로더 use 배열의 로더 적용 순서는 오른쪽에서 왼쪽!
+      {
+        test: /\.scss$/,
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
     ],
   },
 };
 ```
 
-- sass 로더, style 로더 사용하기
 - 플러그인 사용하기
 
 ### 활용
@@ -55,9 +92,11 @@ module.exports = {
 
 ### 이후
 
-- 플러그인의 실제 적용 효과 눈으로 확인하기(의도대로 표현할 수 있도록)
-- 코드 스플리팅의 효용 알아보기
-- 웹팩 이용한 비동기 번들 로딩(레이지 로딩) 구현
+- 트리 쉐이킹
+- 코드 스플리팅 + 그리고 그게 어떨 때 좋은지
+- 비동기 번들 로딩(레이지 로딩) 구현
+- 커스텀 로더 만들기
+- 커스텀 플러그인 만들기
 
 ## 📝 커밋 규칙
 
@@ -68,4 +107,5 @@ ex : 기초: 2.css 로더 사용하기
 ## reference
 
 - [캡틴판교 - 웹팩 핸드북](https://joshua1988.github.io/webpack-guide/)
+- [실전 리액트 프로그래밍 - 7.4 웹팩 고급편](http://www.yes24.com/Product/Goods/74223605)
 - [webpack official documentation](https://webpack.js.org/)
