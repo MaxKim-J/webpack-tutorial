@@ -1,19 +1,19 @@
 var path = require("path");
 var webpack = require("webpack");
-var HtmlWebpackPlugin = require("html-webpack-plugin");
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   mode: "none",
   entry: "./src/index.js",
   output: {
-    filename: "main.js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "dist"),
   },
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ["css-loader"],
+        use: [{ loader: MiniCssExtractPlugin.loader }, "css-loader"],
       },
       {
         test: /\.scss$/,
@@ -21,5 +21,5 @@ module.exports = {
       },
     ],
   },
-  plugins: [new HtmlWebpackPlugin(), new webpack.ProgressPlugin()],
+  plugins: [new webpack.ProgressPlugin(), new MiniCssExtractPlugin()],
 };

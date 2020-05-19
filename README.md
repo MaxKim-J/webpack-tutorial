@@ -119,6 +119,39 @@ module.exports = {
 ### 활용
 
 - 기초적인 코드 스플리팅
+
+```js
+// css loader에 플러그인을 적용하여 css 파일을 따로 빼는 과정
+
+var path = require("path");
+var webpack = require("webpack");
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+module.exports = {
+  mode: "none",
+  entry: "./src/index.js",
+  output: {
+    filename: "[name].js",
+    path: path.resolve(__dirname, "dist"),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        // 로더 플러그인은 여기다가 객체로 등록해준다
+        use: [{ loader: MiniCssExtractPlugin.loader }, "css-loader"],
+      },
+      {
+        test: /\.scss$/,
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
+    ],
+  },
+  // 새로운 플러그인 인스턴스 추가
+  plugins: [new webpack.ProgressPlugin(), new MiniCssExtractPlugin()],
+};
+```
+
 - 웹팩 데브 서버 + 소스맵 활용
 - mode 알아보기
 
