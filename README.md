@@ -6,7 +6,7 @@
 
 ### 기초
 
-- 초기 빌드 설정
+#### 초기 빌드 설정
 
 ```js
 var path = require("path");
@@ -21,7 +21,7 @@ module.exports = {
 };
 ```
 
-- css 로더 사용하기
+#### css 로더 사용하기
 
 ```bash
 npm i -D css-loader
@@ -49,7 +49,7 @@ module.exports = {
 };
 ```
 
-- sass 로더, style 로더 사용하기
+#### sass 로더, style 로더 사용하기
 
 ```bash
 npm i node-sass sass-loader style-loader
@@ -82,7 +82,7 @@ module.exports = {
 };
 ```
 
-- 플러그인 사용하기
+#### 플러그인 사용하기
 
 ```js
 var path = require("path");
@@ -118,7 +118,7 @@ module.exports = {
 
 ### 활용
 
-- 기초적인 코드 스플리팅
+#### 기초적인 코드 스플리팅
 
 ```js
 // css loader에 플러그인을 적용하여 css 파일을 따로 빼는 과정
@@ -152,8 +152,61 @@ module.exports = {
 };
 ```
 
-- 웹팩 데브 서버 + 소스맵 활용
-- mode 알아보기
+#### 웹팩 데브 서버
+
+```bash
+npm i webpack-dev-server -D
+```
+
+```JSON
+ "scripts": {
+    "build": "webpack",
+    "dev": "webpack-dev-server"
+  }
+```
+
+```js
+var path = require("path");
+var webpack = require("webpack");
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+module.exports = {
+  mode: "none",
+  entry: "./src/index.js",
+  output: {
+    filename: "[name].js",
+    path: path.resolve(__dirname, "dist"),
+  },
+  devServer: {
+    // 수정한 결과물 실시간 반영
+    hot:true
+    // 띄울 포트번호를 써준다
+    port: 9000,
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [{ loader: MiniCssExtractPlugin.loader }, "css-loader"],
+      },
+      {
+        test: /\.scss$/,
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
+    ],
+  },
+  plugins: [new webpack.ProgressPlugin(), new MiniCssExtractPlugin()],
+};
+```
+
+- 웹팩의 빌드 대상 파일이 변경되었을 때 매번 웹팩 명령어를 실행해서 빌드하지 않아도 코드만 변경하고 저장하면 웹팩으로 빌드한 후 브라우저 새로고침함
+- 웹팩 기반의 웹 어플리케이션 개발에 필수
+- 빌드한 결과물(dist)이 파일 탐색기나 프로젝트 폴더에서 보이지 않는다. => 결과물이 메모리에 저장되고 파일로 생성하지는 않기 때문에 컴퓨터가 접근할 수는 있지만 직접 눈으로 보고 파일 조작은 못함
+- 이건 개발할때만 사용해야되고 개발 완료되면 파일로 만들면 된다
+
+#### 소스맵
+
+#### mode 알아보기
 
 ### 이후
 
