@@ -204,9 +204,59 @@ module.exports = {
 - 빌드한 결과물(dist)이 파일 탐색기나 프로젝트 폴더에서 보이지 않는다. => 결과물이 메모리에 저장되고 파일로 생성하지는 않기 때문에 컴퓨터가 접근할 수는 있지만 직접 눈으로 보고 파일 조작은 못함
 - 이건 개발할때만 사용해야되고 개발 완료되면 파일로 만들면 된다
 
-#### 소스맵
+#### 실행 모드에 따라 웹팩 설정 달리하기
 
-#### mode 알아보기
+```Json
+{
+  "build": "webpack",
+  "development": "npm run build --env.mode=development",
+  "production": "npm run build --env.mode=production"
+}
+
+```
+
+```js
+// 기존의 객체 방식에서 객체를 리턴하는 함수로 구조가 바뀜
+
+var path = require("path");
+var webpack = require("webpack");
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+module.exports = (env) => {
+  // env모드는 script 실행시 인자로 줄 수 있음
+  let entryPath =
+    env.mode === "production" ? "./public/index.js" : "./src/index.js";
+
+  return {
+    entry: entryPath,
+    output: {
+      filename: "[name].js",
+      path: path.resolve(__dirname, "dist"),
+    },
+    devServer: {
+      hot: true,
+      port: 9000,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.css$/,
+          use: [{ loader: MiniCssExtractPlugin.loader }, "css-loader"],
+        },
+        {
+          test: /\.scss$/,
+          use: ["style-loader", "css-loader", "sass-loader"],
+        },
+      ],
+    },
+    plugins: [new webpack.ProgressPlugin(), new MiniCssExtractPlugin()],
+  };
+};
+```
+
+- 함수에 넘겨준 env 인자는 환경변수를 의미하며 웹팩을 실행할 때 실행 옵션으로 넘겨주는게 가능함
+- `npm run build --env.mode=development` 뭐 이런식으로
+- 그리고 entry에서 3항 연산자 변수 사용해 그 인자에 해당하는 빌드 방식 선택 가능함
 
 ### 이후
 
